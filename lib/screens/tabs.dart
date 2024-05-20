@@ -41,13 +41,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   //   }
   // }
 
-  void _showSnackbarAlert(String message) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 5),
-    ));
-  }
+  // void _showSnackbarAlert(String message) {
+  //   ScaffoldMessenger.of(context).clearSnackBars();
+  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //     content: Text(message),
+  //     duration: const Duration(seconds: 5),
+  //   ));
+  // }
 
   void _selectPage(int index) {
     setState(() {
