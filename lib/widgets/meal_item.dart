@@ -5,12 +5,9 @@ import 'package:meals_app/widgets/meal_item_info.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem(
-      {super.key, required this.meal, required this.onToggleFavorite});
+  const MealItem({super.key, required this.meal});
 
   final Meal meal;
-
-  final void Function(Meal meal) onToggleFavorite;
 
   String enumsToStr(String str) {
     return str[0].toUpperCase() + str.substring(1);
@@ -20,7 +17,6 @@ class MealItem extends StatelessWidget {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MealInfoScreen(
         meal: meal,
-        onToggleFavorite: onToggleFavorite,
       );
     }));
   }
