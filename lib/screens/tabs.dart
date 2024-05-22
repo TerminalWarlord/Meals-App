@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meals_app/data/dummy_data.dart';
 import 'package:meals_app/providers/favorite_meal_provider.dart';
 import 'package:meals_app/providers/meal_provider.dart';
 import 'package:meals_app/screens/category_screen.dart';
 import 'package:meals_app/screens/filters.dart';
 import 'package:meals_app/screens/meals.dart';
-import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
+import 'package:meals_app/providers/filters_provider.dart';
 
 const kInitialFilters = {
   Filter.glutenFree: false,
@@ -24,7 +23,6 @@ class TabsScreen extends ConsumerStatefulWidget {
 }
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
-  Map<Filter, bool> _selectedFilters = kInitialFilters;
   int _selectedPageIndex = 0;
 
   // void _toggleFavorite(Meal meal) {
@@ -58,28 +56,37 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   void _selectMenu(String identifier) async {
     Navigator.pop(context);
     if (identifier == 'filters') {
-      final result = await Navigator.push<Map<Filter, bool>>(
+      Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (ctx) => FiltersScreen(filters: _selectedFilters),
+          builder: (ctx) => const FiltersScreen(),
         ),
       );
+
+      // get return value from the screen that is POPPED
+      // final result = await Navigator.push<Map<Filter, bool>>(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (ctx) => const FiltersScreen(),
+      //   ),
+      // );
       // print(result);
-      setState(() {
-        _selectedFilters = result ?? kInitialFilters;
-      });
+      // setState(() {
+      //   _selectedFilters = result;
+      // });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealProvider);
+    final activeFilters = ref.watch(filtersProvider);
 
     final availableMeals = meals.where((meal) {
-      if ((_selectedFilters[Filter.glutenFree]! && !meal.isGlutenFree) ||
-          (_selectedFilters[Filter.lactoseFree]! && !meal.isLactoseFree) ||
-          (_selectedFilters[Filter.vegetarian]! && !meal.isVegetarian) ||
-          (_selectedFilters[Filter.vegan]! && !meal.isVegan)) {
+      if ((activeFilters[Filter.glutenFree]! && !meal.isGlutenFree) ||
+          (activeFilters[Filter.lactoseFree]! && !meal.isLactoseFree) ||
+          (activeFilters[Filter.vegetarian]! && !meal.isVegetarian) ||
+          (activeFilters[Filter.vegan]! && !meal.isVegan)) {
         return false;
       }
       return true;
