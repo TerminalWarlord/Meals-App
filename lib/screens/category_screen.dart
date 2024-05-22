@@ -48,8 +48,18 @@ class _CategoryScreenState extends State<CategoryScreen>
     return AnimatedBuilder(
       animation: _animationController,
       builder: (ctx, child) {
-        return Padding(
-          padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        // return Padding(
+        //   padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        //   child: child,
+        // );
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.3),
+            end: const Offset(0, 0),
+          ).animate(
+            CurvedAnimation(
+                parent: _animationController, curve: Curves.easeInOut),
+          ),
           child: child,
         );
       },

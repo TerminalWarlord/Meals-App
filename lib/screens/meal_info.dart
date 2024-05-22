@@ -16,38 +16,51 @@ class MealInfoScreen extends ConsumerWidget {
         title: Text(meal.title),
         actions: [
           IconButton(
-            onPressed: () {
-              final isAdded = ref
-                  .read(favoriteMealProvider.notifier)
-                  .toggleFavoriteMeal(meal);
+              onPressed: () {
+                final isAdded = ref
+                    .read(favoriteMealProvider.notifier)
+                    .toggleFavoriteMeal(meal);
 
-              ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(isAdded
-                    ? "${meal.title} has been added to favorites"
-                    : "${meal.title} has been removed to favorites!"),
-                duration: const Duration(seconds: 5),
-              ));
-            },
-            icon: isLiked
-                ? const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  )
-                : const Icon(
-                    Icons.favorite_border,
-                  ),
-          )
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(isAdded
+                      ? "${meal.title} has been added to favorites"
+                      : "${meal.title} has been removed to favorites!"),
+                  duration: const Duration(seconds: 5),
+                ));
+              },
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                transitionBuilder: (child, animation) {
+                  return SizeTransition(
+                    sizeFactor: animation,
+                    child: child,
+                  );
+                },
+                child: isLiked
+                    ? Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                        key: ValueKey(isLiked),
+                      )
+                    : Icon(
+                        Icons.favorite_border,
+                        key: ValueKey(isLiked),
+                      ),
+              ))
         ],
       ),
       body: ListView(children: [
         Column(
           children: [
-            Image.network(
-              meal.imageUrl,
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(
               height: 15,
